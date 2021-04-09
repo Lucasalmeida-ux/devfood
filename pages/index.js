@@ -1,82 +1,74 @@
 import Head from 'next/head'
+import Layout from '../components/layout'
+import { useForm } from "react-hook-form";
+import { useRouter } from 'next/router'
 
 export default function Home() {
+  const router = useRouter()
+  const { register, handleSubmit, formState: { errors } } = useForm();
+  const onSubmit = data => console.log(data);
+  const loginSubmit = async data => {
+    const res = await fetch(`https://receitas.devari.com.br/authentication/`,
+        {
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json'  
+            },
+            method: 'POST'
+        }
+    )
+    const datas = await res.json()
+    if (res.status == 200) {
+        console.log(datas)
+        router.push('/receitas')
+    }
+}
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2">
-      <Head>
-        <title>Create Next App</title>
+    <>
+    <Head>
+        <title>DEVfood</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <Layout title="Entre em sua conta" auth={false}>
+      <div className="max-w-md w-full mx-auto bg-white p-5 rounded-md">
+            <form className="mt-8 space-y-6" onSubmit={handleSubmit(loginSubmit)}>
+              <input type="hidden" name="remember" value="true" />
+              <div className="rounded-md shadow-sm -space-y-px">
+                <div>
+                  <label htmlFor="username" className="px-2 mb-2 block text-sm text-gray-800">Username</label>
+                  <input 
+                    id="username" 
+                    name="username" 
+                    type="text" 
+                    required
+                    {...register("username", { required: true })}
+                    placeholder="exemplo@exemplo.com"
+                    className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-offset-df-blue focus:border-gray-700 focus:z-10 sm:text-sm"/> 
+                </div>
+                <div>
+                  <label htmlFor="password" className="px-2 my-2 block text-sm text-gray-800">Senha</label>
+                  <input 
+                    id="password" 
+                    name="password" 
+                    required
+                    type="password" 
+                    autoComplete="current-password" 
+                    {...register("password", { required: true })}
+                    placeholder="*******"
+                    className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-df-blue focus:border-gray-700 focus:z-10 sm:text-sm" /> 
+                </div>
+              </div>
 
-      <main className="flex flex-col items-center justify-center flex-1 px-20 text-center">
-        <h1 className="text-6xl font-bold">
-          Welcome to{' '}
-          <a className="text-blue-600" href="https://nextjs.org">
-            Next.js!
-          </a>
-        </h1>
-
-        <p className="mt-3 text-2xl">
-          Get started by editing{' '}
-          <code className="p-3 font-mono text-lg bg-gray-100 rounded-md">
-            pages/index.js
-          </code>
-        </p>
-
-        <div className="flex flex-wrap items-center justify-around max-w-4xl mt-6 sm:w-full">
-          <a
-            href="https://nextjs.org/docs"
-            className="p-6 mt-6 text-left border w-96 rounded-xl hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Documentation &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Find in-depth information about Next.js features and API.
-            </p>
-          </a>
-
-          <a
-            href="https://nextjs.org/learn"
-            className="p-6 mt-6 text-left border w-96 rounded-xl hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Learn &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Learn about Next.js in an interactive course with quizzes!
-            </p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className="p-6 mt-6 text-left border w-96 rounded-xl hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Examples &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Discover and deploy boilerplate example Next.js projects.
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className="p-6 mt-6 text-left border w-96 rounded-xl hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Deploy &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className="flex items-center justify-center w-full h-24 border-t">
-        <a
-          className="flex items-center justify-center"
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className="h-4 ml-2" />
-        </a>
-      </footer>
-    </div>
+              <div>
+                <button type="submit" className="float-right py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-df-oran hover:bg-df-blue focus:outline-none">
+                  Entrar
+                </button>
+                {errors.exampleRequired && <span>Campo Obrigatório</span>}
+              </div>
+            </form>
+            
+          </div>
+      </Layout>
+</>
   )
 }
