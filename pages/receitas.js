@@ -13,7 +13,7 @@ export default function Receitas(props) {
             <div key={receita.id}>
 
             
-            <Link href={`/receita/${receita.id}`}>
+            <Link href={`/receita?id=${receita.id}`}>
                 <div className="cursor-pointer m-4 rounded-md bg-white transition-shadow hover:shadow-md">
                   <div className="h-28 overflow-hidden relative rounded-t-md">
                     <img src={receita.category.image} className="absolute bottom-0" />
@@ -44,21 +44,6 @@ export default function Receitas(props) {
       </Head>
       <Layout title="Receitas" auth={props.cookie}>
         <div className="grid grid-cols-3 w-full">
-          {/* <div className="bg-white">
-                <h3>Calabresa</h3>
-            </div>
-            <div className="bg-white">
-                <h3>Calabresa</h3>
-            </div>
-            <div className="bg-white">
-                <h3>Calabresa</h3>
-            </div>
-            <div className="bg-white">
-                <h3>Calabresa</h3>
-            </div>
-            <div className="bg-white">
-                <h3>Calabresa</h3>
-            </div> */}
           <Receitas />
 
         </div>
@@ -68,19 +53,11 @@ export default function Receitas(props) {
 }
 
 export async function getServerSideProps ({ req, res }) {
-  // const data = parseCookies(req)
-
-  // if (res) {
-  //   if (Object.keys(data).length === 0 && data.constructor === Object) {
-  //     res.writeHead(301, { Location: "/" })
-  //     res.end()
-  //   }
-  // }
   const cookie = JSON.parse(req.cookies.user)
   const token = `token ${cookie.token}`
 
   //buscar receitas
-  // GET - https://receitas.devari.com.br/api/v1/recipe
+
   const receitas_res = await fetch(`https://receitas.devari.com.br/api/v1/recipe`,
     {
       headers: {

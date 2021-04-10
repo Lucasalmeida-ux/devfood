@@ -1,14 +1,15 @@
 import Link from 'next/link'
-import { useCookies } from "react-cookie"
 import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 
 export default function Layout(props) {
   const router = useRouter()
-  const [cookie, setCookie] = useCookies(["user"])
   const user = props.auth
-  if(typeof user === 'undefined' || !user && router.asPath != '/') {
-     router.push('/')
-  }
+  useEffect(() => {
+    if(typeof user === 'undefined' || !user && router.asPath != '/') {
+      router.push('/')
+   }
+  })
   const logOut = () => {
     setCookie("user", "", {
       path: "/",
