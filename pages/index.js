@@ -2,11 +2,11 @@ import Head from 'next/head'
 import Layout from '../components/layout'
 import { useForm } from "react-hook-form";
 import { useRouter } from 'next/router'
+import Cookie from 'js-cookie'
 
 export default function Home() {
   const router = useRouter()
   const { register, handleSubmit, formState: { errors } } = useForm();
-  const onSubmit = data => console.log(data);
   const loginSubmit = async data => {
     const res = await fetch(`https://receitas.devari.com.br/authentication/`,
         {
@@ -17,9 +17,9 @@ export default function Home() {
             method: 'POST'
         }
     )
-    const datas = await res.json()
+    const user = await res.json()
     if (res.status == 200) {
-        console.log(datas)
+      Cookie.set('user', JSON.stringify(user), 1 /24)
         router.push('/receitas')
     }
 }
@@ -59,8 +59,8 @@ export default function Home() {
                 </div>
               </div>
 
-              <div>
-                <button type="submit" className="float-right py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-df-oran hover:bg-df-blue focus:outline-none">
+              <div className="flex flex-row-reverse">
+                <button type="submit" className="py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-df-oran hover:bg-df-blue focus:outline-none">
                   Entrar
                 </button>
                 {errors.exampleRequired && <span>Campo Obrigatório</span>}

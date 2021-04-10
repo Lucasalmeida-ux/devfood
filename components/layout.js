@@ -1,7 +1,41 @@
 import Link from 'next/link'
-import { FaUserCircle } from 'react-icons/fa'
+import { useCookies } from "react-cookie"
+import { useRouter } from 'next/router'
 
 export default function Layout(props) {
+  const router = useRouter()
+  const [cookie, setCookie] = useCookies(["user"])
+  const user = props.auth
+  if(typeof user === 'undefined' || !user && router.asPath != '/') {
+     router.push('/')
+  }
+  const logOut = () => {
+    setCookie("user", "", {
+      path: "/",
+      maxAge: 3600, // Expires after 1hr
+      sameSite: true,
+    })
+    router.push('/')
+  }
+  const Menu = () => {
+    if(router.asPath != '/') {
+    return(
+      <nav className="float-right">
+      <Link href="/receitas"><a className="text-white hover:text-yellow-100 font-semibold mx-3 text-sm">Receitas</a></Link>
+      <Link href="/minhas-receitas"><a className="text-white hover:text-yellow-100 font-semibold mx-3 text-sm">Minhas Receitas</a></Link>
+      <Link href="/add-receitas"><a className="text-white hover:text-yellow-100 font-semibold mx-3 text-sm">Adicionar Receita</a></Link>
+    
+      <div className="inline-block ml-5">
+        <span className="text-white font-normal">{user.name}</span>
+        <img src={user.image} width="30" height="30" className="inline-block rounded-full mx-2" />
+        <button onClick={logOut} className="focus:outline-none text-white hover:text-red-700 font-semibold text-sm">Sair</button>
+
+      </div>
+    </nav>
+    )
+  }
+  return ""
+  }
     return (
         <>
     <div className="">
@@ -18,22 +52,4 @@ export default function Layout(props) {
     </div>
         </>
     )
-}
-
-function Menu() {
-  return(
-    <nav className="float-right">
-      <Link href="/receitas"><a className="text-white hover:text-yellow-100 font-semibold mx-3 text-sm">Receitas</a></Link>
-      <Link href="/minhas-receitas"><a className="text-white hover:text-yellow-100 font-semibold mx-3 text-sm">Minhas Receitas</a></Link>
-      <Link href="/add-receitas"><a className="text-white hover:text-yellow-100 font-semibold mx-3 text-sm">Adicionar Receita</a></Link>
-    
-      <div className="inline-block ml-5">
-        <span className="text-white font-normal">Nome</span>
-        {/* <img className="inline-block" src="people.png" /> */}
-        <FaUserCircle  className="inline-block text-df-blue text-4xl mx-2" />
-        <Link href="/"><a className="text-white hover:text-red-700 font-semibold text-sm">Sair</a></Link>
-
-      </div>
-    </nav>
-  )
 }
