@@ -9,19 +9,17 @@ export default function Receita(props) {
         <title>{receita.title}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Layout title={receita.title} auth={props.cookie}>
-        <div>
+      <Layout title={receita.title} auth={props.cookie} toback={true}>
           <div className="h-60 overflow-hidden relative rounded-t-md">
             <img src={receita.category.image} className="absolute bottom-0" />
             <h2 className="absolute bottom-1 left-2 text-white font-bold">
               {receita.category.name}
             </h2>
           </div>
-          <div className="p-2">
+          <div className="p-2 bg-white rounded-b-md">
             <h3 className="text-sm font-semibold text-df-oran">{receita.title}</h3>
             <p className="text-sm font-normal text-df-blue">{receita.description}</p>
           </div>
-        </div>
       </Layout>
     </>
   )
