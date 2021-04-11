@@ -1,7 +1,9 @@
 import Head from 'next/head'
 import Layout from '../components/layout'
+import ParsedCookie from '../utils/parsed-cookie'
 
 export default function Receita(props) {
+  const user = props.user
   const receita = props.receita
   return (
     <>
@@ -9,7 +11,7 @@ export default function Receita(props) {
         <title>{receita.title}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Layout title={receita.title} auth={props.cookie} toback={true}>
+      <Layout title={receita.title} auth={user} toback={true}>
           <div className="h-60 overflow-hidden relative rounded-t-md">
             <img src={receita.category.image} className="absolute bottom-0" />
             <h2 className="absolute bottom-1 left-2 text-white font-bold">
@@ -26,9 +28,9 @@ export default function Receita(props) {
 }
 
 export async function getServerSideProps(context) {
-  const cookie = JSON.parse(context.req.cookies.user)
   const query = context.query
-  const token = `token ${cookie.token}`
+  const user = ParsedCookie(context.req, context.res)
+  const token = `token ${user.token}`
 
   //buscar receita
 
@@ -43,6 +45,6 @@ export async function getServerSideProps(context) {
   )
   const receita = await receita_res.json()
   return {
-    props: { cookie, receita, token },
+    props: { user, receita },
   }
 }

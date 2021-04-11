@@ -2,7 +2,10 @@ import Head from 'next/head'
 import Layout from '../components/layout'
 import Link from 'next/link'
 import { FaPlus, FaEdit } from 'react-icons/fa'
+import ParsedCookie from '../utils/parsed-cookie'
+
 export default function Receitas(props) {
+  const user = props.user
   const receitas = props.receitas.slice(0).reverse()
   const Receitas = () => {
     return (
@@ -47,7 +50,7 @@ export default function Receitas(props) {
         <title>Receitas - DEVfood</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Layout title="Minhas receitas" auth={props.cookie}>
+      <Layout title="Minhas receitas" auth={user}>
       <div className="grid grid-cols-3 w-full">
         <Receitas />
       </div>
@@ -57,10 +60,9 @@ export default function Receitas(props) {
 }
 
 export async function getServerSideProps ({ req, res }) {
-
-  const cookie = JSON.parse(req.cookies.user)
-  const token = `token ${cookie.token}`
-  const receitas_res = await fetch(`https://receitas.devari.com.br/api/v1/recipe?user=${cookie.id}`,
+  const user = ParsedCookie(req, res)
+  const token = `token ${user.token}`
+  const receitas_res = await fetch(`https://receitas.devari.com.br/api/v1/recipe?user=${user.id}`,
     {
       headers: {
         'Content-Type': 'application/json',
@@ -71,6 +73,6 @@ export async function getServerSideProps ({ req, res }) {
   )
   const receitas = await receitas_res.json()
   return {
-    props: { cookie, receitas, token},
+    props: { receitas, user},
   }
 }

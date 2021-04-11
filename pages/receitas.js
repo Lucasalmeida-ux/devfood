@@ -1,9 +1,11 @@
 import Head from 'next/head'
 import Layout from '../components/layout'
 import Link from 'next/link'
+import ParsedCookie from '../utils/parsed-cookie'
 
 export default function Receitas(props) {
-  const user = JSON.parse(props.cookie)
+  const user = props.user
+  console.log(user)
   const Receitas = () => {
     return (
       <>
@@ -52,9 +54,9 @@ export default function Receitas(props) {
   )
 }
 
-export async function getServerSideProps({ req }) {
-  const cookie = req.cookies.user
-  const token = `token ${req.cookies.token}`
+export async function getServerSideProps({ req, res }) {
+  const user = ParsedCookie(req, res)
+  const token = `token ${user.token}`
 
   //buscar receitas
 
@@ -69,6 +71,6 @@ export async function getServerSideProps({ req }) {
   )
   const receitas = await receitas_res.json()
   return {
-    props: { cookie, receitas, token },
+    props: { receitas, user },
   }
 }

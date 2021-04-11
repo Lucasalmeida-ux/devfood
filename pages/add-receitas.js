@@ -1,13 +1,15 @@
 import Head from 'next/head'
 import Layout from '../components/layout'
 import { useForm } from "react-hook-form";
+import ParsedCookie from '../utils/parsed-cookie'
 
-export default function Receitas(props) {
+export default function AddReceitas(props) {
+  const user = props.user
   const cat_receitas = props.cat_receitas
-  const token = `token ${props.cookie.token}`
+  const token = `token ${user.token}`
   const { register, handleSubmit, formState: { errors }, reset } = useForm();
   const addReceitaSubmit = async (data, e) => {
-    const new_receita = {...data, user: props.cookie.id}
+    const new_receita = {...data, user: user.id}
     const req = await fetch(`https://receitas.devari.com.br/api/v1/recipe/`,
       {
         body: JSON.stringify(new_receita),
@@ -29,7 +31,7 @@ export default function Receitas(props) {
         <title>Receitas - DEVfood</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Layout title="Adicionar Receita" auth={props.cookie} toback={true}>
+      <Layout title="Adicionar Receita" auth={user} toback={true}>
         <div className="max-w-2xl w-full mx-auto bg-white p-5 rounded-md">
           <form className="mt-8 space-y-2" onSubmit={handleSubmit(addReceitaSubmit)}>
             <input
@@ -74,8 +76,8 @@ export default function Receitas(props) {
 }
 
 export async function getServerSideProps({ req, res }) {
-  const cookie = JSON.parse(req.cookies.user)
-  const token = `token ${cookie.token}`
+  const user = ParsedCookie(req, res)
+  const token = `token ${user.token}`
   const cat_receitas_res = await fetch(`https://receitas.devari.com.br/api/v1/category`,
     {
       headers: {
@@ -87,6 +89,6 @@ export async function getServerSideProps({ req, res }) {
   )
   const cat_receitas = await cat_receitas_res.json()
   return {
-    props: { cookie, cat_receitas },
+    props: { user, cat_receitas },
   }
 }

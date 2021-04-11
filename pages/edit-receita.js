@@ -5,17 +5,19 @@ import { RiDeleteBinLine } from 'react-icons/ri'
 import { ConfirmDialog, IconButton } from '../components/confirm-dialog'
 import { useState } from 'react';
 import { useRouter } from 'next/router'
+import ParsedCookie from '../utils/parsed-cookie'
 
 export default function EditReceitas(props) {
+    const user = props.user
     const router = useRouter()
     const [confirmOpen, setConfirmOpen] = useState(false);
     const cat_receitas = props.cat_receitas
-    const token = `token ${props.cookie.token}`
+    const token = `token ${user.token}`
     const { register, handleSubmit, formState: { errors }, reset } = useForm();
     const receita = props.receita
 
     const editReceitaSubmit = async (data, e) => {
-        const put_receita = { ...data, user: props.cookie.id }
+        const put_receita = { ...data, user: user.id }
         const req = await fetch(`https://receitas.devari.com.br/api/v1/recipe/${receita.id}/`,
             {
                 body: JSON.stringify(put_receita),
@@ -32,7 +34,7 @@ export default function EditReceitas(props) {
             router.push('/minhas-receitas')
         }
     }
-    const deleteReceita = async() => {
+    const deleteReceita = async () => {
         const req = await fetch(`https://receitas.devari.com.br/api/v1/recipe/${receita.id}/`,
             {
                 headers: {
@@ -52,7 +54,7 @@ export default function EditReceitas(props) {
                 <title>Receitas - DEVfood</title>
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <Layout title="Adicionar Receita" auth={props.cookie} toback={true}>
+            <Layout title="Adicionar Receita" auth={user} toback={true}>
                 <div className="max-w-2xl w-full mx-auto bg-white p-5 rounded-md">
                     <IconButton className="float-right" aria-label="delete" onClick={() => setConfirmOpen(true)}>
                         <RiDeleteBinLine className="inline-block" />
@@ -110,9 +112,9 @@ export default function EditReceitas(props) {
 }
 
 export async function getServerSideProps(context) {
+    const user = ParsedCookie(context.req, context.res)
+    const token = `token ${user.token}`
     const query = context.query
-    const cookie = JSON.parse(context.req.cookies.user)
-    const token = `token ${cookie.token}`
 
     //buscar receita
 
@@ -140,6 +142,6 @@ export async function getServerSideProps(context) {
 
 
     return {
-        props: { cookie, cat_receitas, receita },
+        props: { user, cat_receitas, receita },
     }
 }
