@@ -20,7 +20,10 @@ export default function Home() {
     const user = await res.json()
     if (res.status == 200) {
       Cookie.set('user', JSON.stringify(user), 1 /24)
-        router.push('/receitas')
+      Cookie.set('token', user.token, 1 /24)
+         router.push('/receitas')
+    }else {
+      alert("Dados de acesso incorretos")
     }
 }
   return (

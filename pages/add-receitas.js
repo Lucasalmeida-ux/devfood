@@ -73,7 +73,7 @@ export default function Receitas(props) {
   )
 }
 
-export async function getServerSideProps({ req }) {
+export async function getServerSideProps({ req, res }) {
   const cookie = JSON.parse(req.cookies.user)
   const token = `token ${cookie.token}`
   const cat_receitas_res = await fetch(`https://receitas.devari.com.br/api/v1/category`,

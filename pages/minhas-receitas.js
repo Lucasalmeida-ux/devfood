@@ -3,10 +3,11 @@ import Layout from '../components/layout'
 import Link from 'next/link'
 import { FaPlus, FaEdit } from 'react-icons/fa'
 export default function Receitas(props) {
+  const receitas = props.receitas.slice(0).reverse()
   const Receitas = () => {
     return (
       <>
-        {props.receitas.map((receita) => {
+        {receitas.map((receita) => {
           return (
             <div key={receita.id}>
 
@@ -55,7 +56,8 @@ export default function Receitas(props) {
   )
 }
 
-export async function getServerSideProps ({ req }) {
+export async function getServerSideProps ({ req, res }) {
+
   const cookie = JSON.parse(req.cookies.user)
   const token = `token ${cookie.token}`
   const receitas_res = await fetch(`https://receitas.devari.com.br/api/v1/recipe?user=${cookie.id}`,

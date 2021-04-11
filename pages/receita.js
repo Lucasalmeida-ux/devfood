@@ -26,8 +26,8 @@ export default function Receita(props) {
 }
 
 export async function getServerSideProps(context) {
-  const query = context.query
   const cookie = JSON.parse(context.req.cookies.user)
+  const query = context.query
   const token = `token ${cookie.token}`
 
   //buscar receita

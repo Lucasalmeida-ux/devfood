@@ -22,7 +22,7 @@ export function ConfirmDialog(props) {
               onConfirm();
             }}
           >
-            Excluir
+            Confirmar
           </Button>
       </div>
     </Dialog>
