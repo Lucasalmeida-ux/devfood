@@ -32,8 +32,7 @@ export default function Home() {
       <Layout title="Entre em sua conta" auth={false}>
       <div className="max-w-md w-full mx-auto bg-white p-5 rounded-md">
             <form className="mt-8 space-y-6" onSubmit={handleSubmit(loginSubmit)}>
-              <input type="hidden" name="remember" value="true" />
-              <div className="rounded-md shadow-sm -space-y-px">
+              
                 <div>
                   <label htmlFor="username" className="px-2 mb-2 block text-sm text-gray-800">Username</label>
                   <input 
@@ -57,7 +56,7 @@ export default function Home() {
                     placeholder="*******"
                     className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-df-blue focus:border-gray-700 focus:z-10 sm:text-sm" /> 
                 </div>
-              </div>
+              
 
               <div className="flex flex-row-reverse">
                 <button type="submit" className="py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-df-oran hover:bg-df-blue focus:outline-none">

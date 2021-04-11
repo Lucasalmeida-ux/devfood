@@ -3,8 +3,6 @@ import Layout from '../components/layout'
 import Link from 'next/link'
 
 export default function Receitas(props) {
-  // const props_receitas = props.data.receitas
-  console.log(props)
   const Receitas = () => {
     return (
       <>
@@ -23,7 +21,7 @@ export default function Receitas(props) {
                   </div>
                   <div className="p-2">
                     <h3 className="text-sm font-semibold text-df-oran">{receita.title}</h3>
-                    <p className="text-sm font-normal text-df-blue">{receita.description}</p>
+                    <p className="text-sm font-normal text-df-blue line-clamp-3">{receita.description}</p>
                     <div className="flex flex-row-reverse">
                     <a className="text-df-oran text-sm hover:underline">Ver Receita</a>
                     </div>
@@ -33,6 +31,7 @@ export default function Receitas(props) {
             </div>
           )
         })}
+        
       </>
     )
   }

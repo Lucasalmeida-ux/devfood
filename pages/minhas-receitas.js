@@ -1,9 +1,8 @@
 import Head from 'next/head'
 import Layout from '../components/layout'
 import Link from 'next/link'
-
+import { FaPlus } from 'react-icons/fa'
 export default function Receitas(props) {
-  console.log(props)
   const Receitas = () => {
     return (
       <>
@@ -22,9 +21,9 @@ export default function Receitas(props) {
                   </div>
                   <div className="p-2">
                     <h3 className="text-sm font-semibold text-df-oran">{receita.title}</h3>
-                    <p className="text-sm font-normal text-df-blue">{receita.description}</p>
+                    <p className="text-sm font-normal text-df-blue line-clamp-3">{receita.description}</p>
                     <div className="flex flex-row-reverse">
-                    <a className="text-df-oran text-sm hover:underline">Ver Receita</a>
+                    <a className="text-df-oran text-sm hover:underline">Editar</a>
                     </div>
                   </div>
                 </div>
@@ -32,6 +31,12 @@ export default function Receitas(props) {
             </div>
           )
         })}
+        <Link href="/add-receitas">
+        <div className="text-center text-df-oran hover:text-df-blue h-40 cursor-pointer m-4 rounded-md bg-white transition-shadow hover:shadow-md">
+          <FaPlus className="text-5xl inline-block mt-10" /><br />
+          <span>Adicionar Receita</span>
+        </div>
+        </Link>
       </>
     )
   }
@@ -42,15 +47,18 @@ export default function Receitas(props) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout title="Minhas receitas" auth={props.cookie}>
+      <div className="grid grid-cols-3 w-full">
+        <Receitas />
+      </div>
       </Layout>
     </>
   )
 }
 
-export async function getServerSideProps ({ req, res }) {
+export async function getServerSideProps ({ req }) {
   const cookie = JSON.parse(req.cookies.user)
   const token = `token ${cookie.token}`
-  const receitas_res = await fetch(`https://receitas.devari.com.br/api/v1/recipe`,
+  const receitas_res = await fetch(`https://receitas.devari.com.br/api/v1/recipe?user=${cookie.id}`,
     {
       headers: {
         'Content-Type': 'application/json',
