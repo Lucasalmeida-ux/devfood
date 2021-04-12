@@ -51,7 +51,7 @@ export default function Receitas(props) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout title="Minhas receitas" auth={user}>
-      <div className="grid grid-cols-3 w-full">
+      <div className="grid sm:grid-cols-2 md:grid-cols-3 w-full">
         <Receitas />
       </div>
       </Layout>

@@ -3,6 +3,8 @@ import Layout from '../components/layout'
 import { useForm } from "react-hook-form";
 import { useRouter } from 'next/router'
 import Cookie from 'js-cookie'
+import cookie from 'cookie'
+
 
 export default function Home() {
   const router = useRouter()
@@ -44,7 +46,7 @@ export default function Home() {
                     type="text" 
                     required
                     {...register("username", { required: true })}
-                    placeholder="exemplo@exemplo.com"
+                    placeholder="username"
                     className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-offset-df-blue focus:border-gray-700 focus:z-10 sm:text-sm"/> 
                 </div>
                 <div>

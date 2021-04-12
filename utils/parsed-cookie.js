@@ -8,11 +8,7 @@ export default function ParsedCookie(req, res) {
         return "sem cookie"
     }
     const parsedCookie = cookie.parse(req.headers.cookie)
+    if(typeof parsedCookie.user == 'undefined') return "sem cookie"
     const user = JSON.parse(parsedCookie.user)
-    // if (!parsedCookie.user) {
-    //     res.setHeader("location", "/");
-    //     res.statusCode = 302;
-    //     res.end();
-    // }
     return user
 }
